@@ -3,10 +3,13 @@ package com.testesapi.api_testes.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
+
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name="users")
+@Table(name="users")
+@EqualsAndHashCode(of="id")
 public class User {
 
     @Id
