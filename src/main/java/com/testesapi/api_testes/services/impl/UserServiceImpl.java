@@ -1,9 +1,11 @@
 package com.testesapi.api_testes.services.impl;
 
 import com.testesapi.api_testes.domain.User;
+import com.testesapi.api_testes.domain.dto.UserDTO;
 import com.testesapi.api_testes.repositories.UserRepository;
 import com.testesapi.api_testes.services.UserService;
 import com.testesapi.api_testes.services.exceptions.ObjectNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private ModelMapper mapper;
+
     @Override
     public User findById(Integer id) {
         Optional<User> objUser = repository.findById(id);
@@ -26,4 +31,10 @@ public class UserServiceImpl implements UserService {
     public List<User> findAll() {
         return repository.findAll();
     }
+
+    @Override
+    public User create(UserDTO obj) {
+        return repository.save(mapper.map(obj, User.class));
+    }
+
 }
