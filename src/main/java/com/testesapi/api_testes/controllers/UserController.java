@@ -1,5 +1,6 @@
 package com.testesapi.api_testes.controllers;
 
+import com.testesapi.api_testes.domain.User;
 import com.testesapi.api_testes.domain.dto.UserDTO;
 import com.testesapi.api_testes.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -36,5 +37,11 @@ public class UserController {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(service.create(obj).getId()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDTO> atualizar(@PathVariable Integer id, @RequestBody UserDTO obj) {
+        obj.setId(id);
+        return ResponseEntity.ok().body(mapper.map(service.update(obj), UserDTO.class));
     }
 }
