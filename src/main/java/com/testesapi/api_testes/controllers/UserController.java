@@ -1,6 +1,5 @@
 package com.testesapi.api_testes.controllers;
 
-import com.testesapi.api_testes.domain.User;
 import com.testesapi.api_testes.domain.dto.UserDTO;
 import com.testesapi.api_testes.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -16,13 +15,15 @@ import java.util.List;
 @RequestMapping(value = "/user")
 public class UserController {
 
+    public static final String ID = "/{id}";
+
     @Autowired
     private ModelMapper mapper;
 
     @Autowired
     private UserService service;
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = ID)
     public ResponseEntity<UserDTO> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.ok().body(mapper.map(service.findById(id), UserDTO.class));
     }
@@ -34,14 +35,20 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDTO> criar(@RequestBody UserDTO obj) {
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(ID)
                 .buildAndExpand(service.create(obj).getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = ID)
     public ResponseEntity<UserDTO> atualizar(@PathVariable Integer id, @RequestBody UserDTO obj) {
         obj.setId(id);
         return ResponseEntity.ok().body(mapper.map(service.update(obj), UserDTO.class));
+    }
+
+    @DeleteMapping(value = ID)
+    public ResponseEntity<UserDTO> excluir(@PathVariable Integer id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
