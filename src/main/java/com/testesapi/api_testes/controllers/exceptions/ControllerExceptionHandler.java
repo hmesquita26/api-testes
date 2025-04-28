@@ -1,6 +1,6 @@
 package com.testesapi.api_testes.controllers.exceptions;
 
-import com.testesapi.api_testes.services.exceptions.DataIntegratyViolationException;
+import com.testesapi.api_testes.services.exceptions.DataIntegrityViolationException;
 import com.testesapi.api_testes.services.exceptions.ObjectNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<StandardError> dataIntegratyViolationException(DataIntegratyViolationException ex, HttpServletRequest request) {
+    public ResponseEntity<StandardError> dataIntegratyViolationException(DataIntegrityViolationException ex, HttpServletRequest request) {
         StandardError error= new StandardError(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), ex.getMessage(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
