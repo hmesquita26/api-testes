@@ -3,7 +3,6 @@ package com.testesapi.api_testes.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
