@@ -3,7 +3,6 @@ package com.testesapi.api_testes.controllers;
 import com.testesapi.api_testes.domain.User;
 import com.testesapi.api_testes.domain.dto.UserDTO;
 import com.testesapi.api_testes.services.impl.UserServiceImpl;
-import org.apache.coyote.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
