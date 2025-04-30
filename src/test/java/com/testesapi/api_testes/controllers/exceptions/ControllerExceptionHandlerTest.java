@@ -31,8 +31,8 @@ class ControllerExceptionHandlerTest {
     }
 
     @Test
-    void whenObjectNotFoundExceptionThenReturnAResponseEntity() {
-        ResponseEntity<StandardError> response = exceptionHandler.objectNotFoundException(
+    void whenObjectNotFoundThenReturnAResponseEntity() {
+        ResponseEntity<StandardError> response = exceptionHandler.objectNotFound(
                         new ObjectNotFoundException(OBJETO_NAO_ENCONTRADO), new MockHttpServletRequest());
 
         assertNotNull(response);
@@ -47,8 +47,8 @@ class ControllerExceptionHandlerTest {
     }
 
     @Test
-    void whenDataIntegrityViolationExceptionThenReturnAResponseEntity() {
-        ResponseEntity<StandardError> response = exceptionHandler.dataIntegrityViolationException(
+    void whenDataIntegrityViolationThenReturnAResponseEntity() {
+        ResponseEntity<StandardError> response = exceptionHandler.dataIntegrityViolation(
                 new DataIntegrityViolationException(E_MAIL_JA_CADASTRADO_NO_SISTEMA), new MockHttpServletRequest());
 
         assertNotNull(response);
