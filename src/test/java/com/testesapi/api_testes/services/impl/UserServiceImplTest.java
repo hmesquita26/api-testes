@@ -41,8 +41,8 @@ class UserServiceImplTest {
     private ModelMapper mapper;
 
     private User user;
-    private UserDTO userDTO;
-    private Optional<User> optionalUser;
+    private UserDTO userDTO = new UserDTO();
+    private Optional<User> optionalUser = Optional.empty();
 
     @BeforeEach
     void setUp() {
