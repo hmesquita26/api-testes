@@ -6,6 +6,7 @@ import com.testesapi.api_testes.repositories.UserRepository;
 import com.testesapi.api_testes.services.UserService;
 import com.testesapi.api_testes.services.exceptions.DataIntegrityViolationException;
 import com.testesapi.api_testes.services.exceptions.ObjectNotFoundException;
+import com.testesapi.api_testes.services.exceptions.ObjectOptimisticLockingFailureException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(UserDTO obj) {
         findByEmail(obj);
+        Optional<User> existingUser = repository.findById(obj.getId());
+        if (existingUser.isEmpty()) {
+            throw new ObjectOptimisticLockingFailureException("O recurso que você está tentando modificar não existe ou " +
+                    "foi alterado por outro usuário. Atualize os dados e tente novamente.");
+        }
         return repository.save(mapper.map(obj, User.class));
     }
 

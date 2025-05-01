@@ -2,6 +2,8 @@ package com.testesapi.api_testes.controllers.exceptions;
 
 import com.testesapi.api_testes.services.exceptions.DataIntegrityViolationException;
 import com.testesapi.api_testes.services.exceptions.ObjectNotFoundException;
+import com.testesapi.api_testes.services.exceptions.ObjectOptimisticLockingFailureException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,14 +22,21 @@ class ControllerExceptionHandlerTest {
 
     public static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado";
     public static final String E_MAIL_JA_CADASTRADO_NO_SISTEMA = "E-mail já cadastrado no sistema";
+    public static final String RECURSO_NAO_DISPONIVEL = "O recurso que você está tentando modificar não existe ou foi alterado por outro usuário. Atualize os dados e tente novamente.";
 
     @InjectMocks
     private ControllerExceptionHandler exceptionHandler;
 
+    private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        closeable = MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    void tearDown() throws Exception {
+        closeable.close();
     }
 
     @Test
@@ -58,5 +67,21 @@ class ControllerExceptionHandlerTest {
         assertEquals(StandardError.class, response.getBody().getClass());
         assertEquals(E_MAIL_JA_CADASTRADO_NO_SISTEMA, response.getBody().getError());
         assertEquals(400, response.getBody().getStatus());
+    }
+
+    @Test
+     void whenObjectOptimisticLockingFailureExceptionThenReturnAResponseEntity() {
+        ObjectOptimisticLockingFailureException ex = new ObjectOptimisticLockingFailureException(RECURSO_NAO_DISPONIVEL);
+
+        ResponseEntity<StandardError> response = exceptionHandler.ObjectOptimisticLockingFailureException(
+                ex, new MockHttpServletRequest());
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(StandardError.class, response.getBody().getClass());
+        assertEquals(RECURSO_NAO_DISPONIVEL, response.getBody().getError());
+        assertEquals(409, response.getBody().getStatus());
     }
 }
